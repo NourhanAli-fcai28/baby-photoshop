@@ -276,7 +276,7 @@ int main() {
                     cout << "  Height: 0 --> " << image.height-1 << endl;
                     cout << "Please enter the starting point dimensions: \n " ;
                     cin >> dimX >> dimY;
-                    if (dimX >= 0 && dimY >= 0 && dimX < image.width && dimY < image.height){
+                    if (dimX >= 0 && dimY >= 0 && dimX < image.width-1 && dimY < image.height-1){
                         break;
                     } else {
                         cout << " Please enter valid starting dimensions." << endl;
@@ -299,9 +299,9 @@ int main() {
                 int newWidth = cropX - dimX;
                 int newHeight = cropY - dimY;
                 Image newImage(newWidth, newHeight);
-                for (int i = 0; i < newHeight; i++) {
-                    for (int j = 0; j < newWidth; j++) {
-                        for (int k = 0; k < 3; k++) { 
+                for (int i = 0; i < newWidth; i++) {
+                    for (int j = 0; j < newHeight; j++) {
+                        for (int k = 0; k < 3; k++) {
                             newImage(i, j, k) = image(i + dimX, j + dimY, k);
                         }
                     }
