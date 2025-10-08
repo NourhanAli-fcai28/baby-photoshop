@@ -160,6 +160,9 @@ void filter9(Image& image) {
             }
         }
     }
+    else if (decAnswer=="no"){
+        
+    }
     image = framed;
 }
 void filter12(Image& image, int radius) {
