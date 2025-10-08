@@ -68,6 +68,148 @@ void filter6_270_degree(Image& image){
     }
     image = rotated;
 }
+void filter9(Image& image) {
+    int thickness;
+    cout << "Enter frame thickness: ";
+    cin >> thickness;
+    int frameRed = 0, frameGreen = 0, frameBlue = 0;
+    cout << "Enter frame color (RGB , from 0 to 255): ";
+    cin >> frameRed >> frameGreen >> frameBlue;
+    int newWidth = image.width + 2 * thickness;
+    int newHeight = image.height + 2 * thickness;
+    Image framed(newWidth, newHeight);
+    for (int i = 0; i < newWidth; i++) {
+        for (int j = 0; j < newHeight; j++) {
+            for (int k = 0; k < 3; k++) {
+                if (k==0) {
+                    framed(i,j,k) = frameRed;
+                }
+                else if (k==1) {
+                    framed(i,j,k) = frameGreen;
+                }
+                else if (k==2) {
+                    framed(i,j,k) = frameBlue;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                framed(i + thickness, j + thickness, k) = image(i, j, k);
+            }
+        }
+    }
+    cout << "do you want to decorate it?" << endl;
+    string decAnswer;
+    cin >> decAnswer;
+    if (decAnswer == "yes") {
+        cout << "what style do you want " << endl;
+        cout << "1 for decorated corner \n" << "2 for inner border" <<endl;
+        char style;
+        cin >> style;
+        if (style == '1') {
+            int squareSize = thickness*2;
+            int gap = thickness / 2;
+            int thinSize = thickness ;
+            for (int i = 0; i < squareSize + gap + thinSize; i++) {
+                for (int j = 0; j < squareSize + gap + thinSize; j++) {
+                    for (int k = 0; k < 3; k++) {
+                        if (i < squareSize && j < squareSize) {
+                            framed(i, j, k) = 255;  // top-left
+                            framed(newWidth - 1 - i, j, k) = 255;
+                            framed(i, newHeight - 1 - j, k) = 255;
+                            framed(newWidth - 1 - i, newHeight - 1 - j, k) = 255;
+                        }
+                        else if (i >= squareSize + gap && i < squareSize + gap + thinSize &&
+                    j >= squareSize + gap && j < squareSize + gap + thinSize) {
+                            framed(i, j, k) = 255;
+                            framed(newWidth - 1 - i, j, k) = 255;
+                            framed(i, newHeight - 1 - j, k) = 255;
+                            framed(newWidth - 1 - i, newHeight - 1 - j, k) = 255;
+                    }
+
+                    }
+                }
+
+            }
+
+
+
+        }
+        else if (style == '2') {
+            int innertick =thickness/2;
+            int startI = thickness;
+            int startJ = thickness;
+            for (int i = startI; i < newWidth - startI; i++) {
+                for (int t = 0; t < innertick; t++) {
+                    for (int k = 0; k < 3; k++) {
+                        framed(i, startJ + t, k) = 255;
+                        framed(i, newHeight - startJ - t - 1, k) = 255;
+                    }
+                }
+            }
+            for (int j = startJ; j < newHeight - startJ; j++) {
+                for (int t = 0; t < innertick; t++) {
+                    for (int k = 0; k < 3; k++) {
+                        framed(startI + t, j, k) = 255;
+                        framed(newWidth - startI - t - 1, j, k) = 255;
+                    }
+
+                }
+            }
+        }
+    }
+    image = framed;
+}
+void filter12(Image& image, int radius) {
+        int width = image.width;
+        int height = image.height;
+        Image temp(width, height);
+        for (int j = 0; j< height; j++) {
+            for (int k = 0; k < 3; k++) {
+                int sum = 0;
+                for (int i = 0;  i<= radius; i++)
+                    sum += image(i, j, k);
+                temp(0, j, k) = sum / (radius + 1);
+                for (int i = 1; i < width; i++) {
+                    int left = i - radius - 1;
+                    int right = i + radius;
+                    if (left >= 0)
+                        sum -= image(left, j, k);
+                    if (right < width)
+                        sum += image(right, j, k);
+
+                    temp(i, j, k) = sum / (min(width, 2 * radius + 1));
+                }
+            }
+        }
+        for (int i = 0; i < width; i++) {
+            for (int k = 0; k < 3; k++) {
+                int sum = 0;
+                for (int j = 0; j <= radius; j++) {
+                    sum += temp(i, j, k);
+                }
+                image(i, 0, k) = sum / (radius + 1);
+                for (int j = 1; j < height; j++) {
+                    int top = j - radius - 1;
+                    int bottom = j + radius;
+                    if (top >= 0) {
+                        sum -= temp(i, top, k);
+                    }
+
+                    if (bottom < height) {
+                        sum += temp(i, bottom, k);
+                    }
+
+                    image(i, j, k) = sum / (min(height, 2 * radius + 1));
+                }
+            }
+        }
+    }
+
+
+
 
 int main() {
     Image image;
@@ -341,7 +483,9 @@ int main() {
                 image = newImage;
 
             }
-            else if (number==9) {}
+            else if (number==9) {
+                filter9(image);
+            }
             else if (number==10) {
       Image image(fileName);  
     for (int i = 0; i < image.width; i++) {
@@ -396,7 +540,12 @@ int main() {
                 image = newImage;
 
             }
-            else if (number==12) {}
+            else if (number==12) {
+                int raduis;
+                        cout << "Enter radius (greater than 0): ";
+                        cin >> raduis;
+                        filter12(image,raduis);
+            }
 
         }
 
