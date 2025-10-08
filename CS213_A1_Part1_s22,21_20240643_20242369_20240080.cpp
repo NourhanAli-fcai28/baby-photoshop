@@ -116,7 +116,7 @@ void filter9(Image& image) {
                 for (int j = 0; j < squareSize + gap + thinSize; j++) {
                     for (int k = 0; k < 3; k++) {
                         if (i < squareSize && j < squareSize) {
-                            framed(i, j, k) = 255;  
+                            framed(i, j, k) = 255;
                             framed(newWidth - 1 - i, j, k) = 255;
                             framed(i, newHeight - 1 - j, k) = 255;
                             framed(newWidth - 1 - i, newHeight - 1 - j, k) = 255;
@@ -161,7 +161,7 @@ void filter9(Image& image) {
         }
     }
     else if (decAnswer=="no"){
-        
+
     }
     image = framed;
 }
@@ -278,23 +278,23 @@ int main() {
             cin >> number;
 
             if (number == 1) {
-          Image image(fileName);      
-    for (int i = 0; i < photo.width; ++i)
+
+    for (int i = 0; i < image.width; ++i)
     {
-        for (int j = 0; j < photo.height; ++j)
+        for (int j = 0; j < image.height; ++j)
         {
-            unsigned int mix = 0; 
+            unsigned int mix = 0;
             for (int k = 0; k < 3; ++k)
             {
-                mix += photo(i, j, k);
+                mix += image(i, j, k);
             }
-            mix /= 3; 
-            photo(i, j, 0) = mix;
-            photo(i, j, 1) = mix;
-            photo(i, j, 2) = mix;
+            mix /= 3;
+            image(i, j, 0) = mix;
+            image(i, j, 1) = mix;
+            image(i, j, 2) = mix;
         }
     }
- }  
+ }
             else if (number == 2) {
                 for (int i=0 ; i < image.width ;i++ ) {
                     for (int j=0 ; j < image.height ; j++) {
@@ -319,7 +319,7 @@ int main() {
                 filter3(image);
             }
             else if (number == 4) {
-       
+
     auto resizeImage = [&](const Image& srcImage, int newWidth, int newHeight) {
         Image output(newWidth, newHeight);
 
@@ -338,13 +338,12 @@ int main() {
         }
         return output;
     };
-    string firstImageName, secondImageName;
-    cout << "Enter first image: ";
-    cin >> firstImageName;
+    string  secondImageName;
+
     cout << "Enter second image: ";
     cin >> secondImageName;
 
-    Image firstImage(firstImageName);
+    Image firstImage(fileName);
     Image secondImage(secondImageName);
 
     cout << "1 - Resize (smaller)\n2 - Crop (zoom in)\n";
@@ -367,7 +366,7 @@ int main() {
         height = min(firstImage.height, secondImage.height);
     }
     else {
-        
+
     }
     Image merged(width, height);
     for (int i = 0; i < width; ++i) {
@@ -377,6 +376,8 @@ int main() {
             }
         }
     }
+                image = merged;
+
             }
             else if (number == 5) {
                 cout << "press 1 if you want horizontal flip or 2 if you want vertical flip ";
@@ -418,8 +419,6 @@ int main() {
 
             }
             else if (number==7) {
-                              
-    Image image(fileName);  
 
     int flppingchoice;
     cout << "Darken (0) or Lighten (1)? ";
@@ -490,7 +489,6 @@ int main() {
                 filter9(image);
             }
             else if (number==10) {
-      Image image(fileName);  
     for (int i = 0; i < image.width; i++) {
         for (int j = 0; j < image.height; j++) {
             unsigned int intensity = (image(i, j, 0) + image(i, j, 1) + image(i, j, 2)) / 3;
@@ -513,6 +511,8 @@ int main() {
             }
         }
     }
+                image = edges;
+
             }
             else if (number==11) {
                 int oldwidth = image.width;
