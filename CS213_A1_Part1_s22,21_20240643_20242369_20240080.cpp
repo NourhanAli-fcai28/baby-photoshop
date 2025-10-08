@@ -116,7 +116,7 @@ void filter9(Image& image) {
                 for (int j = 0; j < squareSize + gap + thinSize; j++) {
                     for (int k = 0; k < 3; k++) {
                         if (i < squareSize && j < squareSize) {
-                            framed(i, j, k) = 255;  // top-left
+                            framed(i, j, k) = 255;  
                             framed(newWidth - 1 - i, j, k) = 255;
                             framed(i, newHeight - 1 - j, k) = 255;
                             framed(newWidth - 1 - i, newHeight - 1 - j, k) = 255;
