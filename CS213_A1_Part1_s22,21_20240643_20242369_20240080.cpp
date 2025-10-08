@@ -301,8 +301,8 @@ int main() {
                 Image newImage(newWidth, newHeight);
                 for (int i = 0; i < newHeight; i++) {
                     for (int j = 0; j < newWidth; j++) {
-                        for (int k = 0; k < 3; k++) { // c = channel (RGB)
-                            newImage(j, i, k) = image(j + dimX, i + dimY, k);
+                        for (int k = 0; k < 3; k++) { 
+                            newImage(i, j, k) = image(i + dimX, j + dimY, k);
                         }
                     }
                 }
