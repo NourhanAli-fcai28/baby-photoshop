@@ -133,10 +133,7 @@ int main() {
             cin >> number;
 
             if (number == 1) {
-                string inputName;
-    cout << "Enter the inputName of the color image you want to change to grayscale: ";
-    cin >> inputName;
-    Image photo(inputName);
+          Image image(fileName);      
     for (int i = 0; i < photo.width; ++i)
     {
         for (int j = 0; j < photo.height; ++j)
@@ -152,10 +149,7 @@ int main() {
             photo(i, j, 2) = mix;
         }
     }
-  cout << "Save as: (include extension .jpg, .bmp, .png, or .tga): ";
-    cin >> inputName;
-    photo.saveImage(inputName);
-            }
+ }  
             else if (number == 2) {
                 for (int i=0 ; i < image.width ;i++ ) {
                     for (int j=0 ; j < image.height ; j++) {
@@ -238,11 +232,6 @@ int main() {
             }
         }
     }
-    string resultFileName;
-    cout << "Enter output image: ";
-    cin >> resultFileName;
-    merged.saveImage(resultFileName);
-
             }
             else if (number == 5) {
                 cout << "press 1 if you want horizontal flip or 2 if you want vertical flip ";
@@ -285,36 +274,31 @@ int main() {
             }
             else if (number==7) {
                               
-    Image picture(picname);  
+    Image image(fileName);  
 
-    int userChoice;
+    int flppingchoice;
     cout << "Darken (0) or Lighten (1)? ";
 
-    cin >> userChoice;
-    int picW = picture.width;
-    int picH = picture.height;
-    if (userChoice == 0) {
+    cin >> flppingchoice;
+    int picW = image.width;
+    int picH = image.height;
+    if (flppingchoice == 0) {
         for (int x = 0; x < picW; x++) {
             for (int y = 0; y < picH; y++) {
-                for (int c = 0; c < picture.channels; c++) {
-                    picture(x, y, c) = picture(x, y, c) * 0.5;
+                for (int c = 0; c < image.channels; c++) {
+                    image(x, y, c) = image(x, y, c) * 0.5;
                 }
             }
         }
     } else {
         for (int x = 0; x < picW; x++) {
             for (int y = 0; y < picH; y++) {
-                for (int c = 0; c < picture.channels; c++) {
-                    picture(x, y, c) = (picture(x, y, c) + 255) / 2;
+                for (int c = 0; c < image.channels; c++) {
+                    image(x, y, c) = (image(x, y, c) + 255) / 2;
                 }
             }
         }
     }
-    cout << "New image file name: ";
-    string resultFile;
-    cin >> resultFile;
-    picture.saveImage(resultFile);
-
             }
             else if (number==8) {
                 int dimX, dimY  , cropX, cropY;
@@ -359,39 +343,29 @@ int main() {
             }
             else if (number==9) {}
             else if (number==10) {
-                 
-    string inputFileName;
-    cout << "Please enter the image filename: ";
-    cin >> inputFileName;
-    Image img(inputFileName);   
-
-    for (int i = 0; i < img.width; i++) {
-        for (int j = 0; j < img.height; j++) {
-            unsigned int intensity = (img(i, j, 0) + img(i, j, 1) + img(i, j, 2)) / 3;
+      Image image(fileName);  
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            unsigned int intensity = (image(i, j, 0) + image(i, j, 1) + image(i, j, 2)) / 3;
             int bw = (intensity > 127) ? 255 : 0;
             for (int k = 0; k < 3; k++) {
-                img(i, j, k) = bw;
+                image(i, j, k) = bw;
             }
         }
     }
-    Image edges(img.width, img.height);
-    for (int i = 1; i < img.width - 1; i++) {
-        for (int j = 1; j < img.height - 1; j++) {
-            int centerPixel = img(i, j, 0);
+    Image edges(image.width, image.height);
+    for (int i = 1; i < image.width - 1; i++) {
+        for (int j = 1; j < image.height - 1; j++) {
+            int centerPixel = image(i, j, 0);
             if (centerPixel == 0 &&
-                img(i - 1, j, 0) == 0 && img(i + 1, j, 0) == 0 &&
-                img(i, j - 1, 0) == 0 && img(i, j + 1, 0) == 0) {
+                image(i - 1, j, 0) == 0 && image(i + 1, j, 0) == 0 &&
+                image(i, j - 1, 0) == 0 && image(i, j + 1, 0) == 0) {
                 for (int k = 0; k < 3; k++) edges(i, j, k) = 255;
             } else {
                 for (int k = 0; k < 3; k++) edges(i, j, k) = centerPixel;
             }
         }
     }
-    string resultImage;
-   cout << "Output image filename: ";
-    cin >> resultImage;
-    edges.saveImage(resultImage);
-
             }
             else if (number==11) {
                 int oldwidth = image.width;
