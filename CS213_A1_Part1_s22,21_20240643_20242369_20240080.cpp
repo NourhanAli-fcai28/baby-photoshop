@@ -133,19 +133,28 @@ int main() {
             cin >> number;
 
             if (number == 1) {
-                Image image(fileName);
-                for (int i = 0; i < image.width; ++i) {
-                    for (int j = 0; j < image.height; ++j) {
-                        unsigned int avg = 0;
-                        for (int k = 0; k < 3; ++k) {
-                            avg += image(i, j, k);
-                        }
-                        avg /= 3;
-                        image(i, j, 0) = avg;
-                        image(i, j, 1) = avg;
-                        image(i, j, 2) = avg;
-                    }
-                }
+                string inputName;
+    cout << "Enter the inputName of the color image you want to change to grayscale: ";
+    cin >> inputName;
+    Image photo(inputName);
+    for (int i = 0; i < photo.width; ++i)
+    {
+        for (int j = 0; j < photo.height; ++j)
+        {
+            unsigned int mix = 0; 
+            for (int k = 0; k < 3; ++k)
+            {
+                mix += photo(i, j, k);
+            }
+            mix /= 3; 
+            photo(i, j, 0) = mix;
+            photo(i, j, 1) = mix;
+            photo(i, j, 2) = mix;
+        }
+    }
+  cout << "Save as: (include extension .jpg, .bmp, .png, or .tga): ";
+    cin >> inputName;
+    photo.saveImage(inputName);
             }
             else if (number == 2) {
                 for (int i=0 ; i < image.width ;i++ ) {
@@ -171,62 +180,69 @@ int main() {
                 filter3(image);
             }
             else if (number == 4) {
-                auto resizeImage = [&](const Image& input, int newWidth, int newHeight) {
-                    Image output(newWidth, newHeight);
-                    float x_ratio = (float)input.width / newWidth;
-                    float y_ratio = (float)input.height / newHeight;
-                    for (int i = 0; i < newWidth; ++i) {
-                        for (int j = 0; j < newHeight; ++j) {
-                            float origX = i * x_ratio;
-                            float origY = j * y_ratio;
-                            for (int k = 0; k < input.channels; ++k) {
-                                output(i, j, k) = input((int)origX, (int)origY, k);
-                            }
-                        }
-                    }
-                    return output;
-                };
+       
+    auto resizeImage = [&](const Image& srcImage, int newWidth, int newHeight) {
+        Image output(newWidth, newHeight);
 
-                string  file2;
-                cout << "Enter second image: ";
-                cin >> file2;
+        float scaleX = (float)srcImage.width / newWidth;
+        float scaleY = (float)srcImage.height / newHeight;
 
-                Image image1(fileName);
-                Image image2(file2);
+        for (int i = 0; i < newWidth; ++i) {
+            for (int j = 0; j < newHeight; ++j) {
+                float origX = i * scaleX;
+                float origY = j * scaleY;
 
-                cout << "1-resize smaller\n2-crop bigger\n";
-                int choice;
-                cin >> choice;
-                int width, height;
-
-                if (choice == 1) {
-                    if (image1.width * image1.height < image2.width * image2.height) {
-                        image1 = resizeImage(image1, image2.width, image2.height);
-                    } else {
-                        image2= resizeImage(image2, image1.width, image1.height);
-                    }
-                    width = image1.width;
-                    height = image1.height;
-                } else if (choice == 2) {
-                    width = min(image1.width, image2.width);
-                    height = min(image1.height, image2.height);
-                } else {
-                    return 0;
+                for (int k = 0; k < srcImage.channels; ++k) {
+                    output(i, j, k) = srcImage((int)origX, (int)origY, k);
                 }
+            }
+        }
+        return output;
+    };
+    string firstImageName, secondImageName;
+    cout << "Enter first image: ";
+    cin >> firstImageName;
+    cout << "Enter second image: ";
+    cin >> secondImageName;
 
-                Image merged(width, height);
-                for (int i = 0; i < width; ++i) {
-                    for (int j = 0; j < height; ++j) {
-                        for (int k = 0; k < 3; ++k) {
-                            merged(i, j, k) = (image1(i, j, k) + image2(i, j, k)) / 2;
-                        }
-                    }
-                }
+    Image firstImage(firstImageName);
+    Image secondImage(secondImageName);
 
-                string outFile;
-                cout << "Enter output image: ";
-                cin >> outFile;
-                merged.saveImage(outFile);
+    cout << "1 - Resize (smaller)\n2 - Crop (zoom in)\n";
+    int option;
+    cin >> option;
+
+    int width, height;
+
+    if (option == 1) {
+        if (firstImage.width * firstImage.height < secondImage.width * secondImage.height) {
+            firstImage = resizeImage(firstImage, secondImage.width, secondImage.height);
+        } else {
+            secondImage = resizeImage(secondImage, firstImage.width, firstImage.height);
+        }
+        width = firstImage.width;
+        height = firstImage.height;
+    }
+    else if (option == 2) {
+        width = min(firstImage.width, secondImage.width);
+        height = min(firstImage.height, secondImage.height);
+    }
+    else {
+        
+    }
+    Image merged(width, height);
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                merged(i, j, k) = (firstImage(i, j, k) + secondImage(i, j, k)) / 2;
+            }
+        }
+    }
+    string resultFileName;
+    cout << "Enter output image: ";
+    cin >> resultFileName;
+    merged.saveImage(resultFileName);
+
             }
             else if (number == 5) {
                 cout << "press 1 if you want horizontal flip or 2 if you want vertical flip ";
@@ -267,7 +283,39 @@ int main() {
                 }
 
             }
-            else if (number==7) {}
+            else if (number==7) {
+                              
+    Image picture(picname);  
+
+    int userChoice;
+    cout << "Darken (0) or Lighten (1)? ";
+
+    cin >> userChoice;
+    int picW = picture.width;
+    int picH = picture.height;
+    if (userChoice == 0) {
+        for (int x = 0; x < picW; x++) {
+            for (int y = 0; y < picH; y++) {
+                for (int c = 0; c < picture.channels; c++) {
+                    picture(x, y, c) = picture(x, y, c) * 0.5;
+                }
+            }
+        }
+    } else {
+        for (int x = 0; x < picW; x++) {
+            for (int y = 0; y < picH; y++) {
+                for (int c = 0; c < picture.channels; c++) {
+                    picture(x, y, c) = (picture(x, y, c) + 255) / 2;
+                }
+            }
+        }
+    }
+    cout << "New image file name: ";
+    string resultFile;
+    cin >> resultFile;
+    picture.saveImage(resultFile);
+
+            }
             else if (number==8) {
                 int dimX, dimY  , cropX, cropY;
                 while (true) {
@@ -310,7 +358,41 @@ int main() {
 
             }
             else if (number==9) {}
-            else if (number==10) {}
+            else if (number==10) {
+                 
+    string inputFileName;
+    cout << "Please enter the image filename: ";
+    cin >> inputFileName;
+    Image img(inputFileName);   
+
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            unsigned int intensity = (img(i, j, 0) + img(i, j, 1) + img(i, j, 2)) / 3;
+            int bw = (intensity > 127) ? 255 : 0;
+            for (int k = 0; k < 3; k++) {
+                img(i, j, k) = bw;
+            }
+        }
+    }
+    Image edges(img.width, img.height);
+    for (int i = 1; i < img.width - 1; i++) {
+        for (int j = 1; j < img.height - 1; j++) {
+            int centerPixel = img(i, j, 0);
+            if (centerPixel == 0 &&
+                img(i - 1, j, 0) == 0 && img(i + 1, j, 0) == 0 &&
+                img(i, j - 1, 0) == 0 && img(i, j + 1, 0) == 0) {
+                for (int k = 0; k < 3; k++) edges(i, j, k) = 255;
+            } else {
+                for (int k = 0; k < 3; k++) edges(i, j, k) = centerPixel;
+            }
+        }
+    }
+    string resultImage;
+   cout << "Output image filename: ";
+    cin >> resultImage;
+    edges.saveImage(resultImage);
+
+            }
             else if (number==11) {
                 int oldwidth = image.width;
                 int oldhigh = image.height;
