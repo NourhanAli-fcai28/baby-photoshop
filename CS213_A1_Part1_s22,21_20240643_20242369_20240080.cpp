@@ -1,7 +1,8 @@
-// Name : Nourhan Ali Abd El-Moneim Ali ID : 20240643  filters : (2 black & white) & (5 flip ) .
-// Name : Nada Ahmed Abd El-Aziz Mohamed  ID : 20242369 filters : (3 invert image ) & (6 rotate image  ).
-// Name : Eslam Ahmed El-Sayed Mahmoud   ID : 20240080 filters : (1 gray scale ) & (4 merge image  ) .
-
+// Name : Nourhan Ali Abd El-Moneim Ali ID : 20240643  filters : (2 black & white) & (5 flip ) & (8 crop) & (11 resizing) .
+// Name : Nada Ahmed Abd El-Aziz Mohamed  ID : 20242369 filters : (3 invert image ) & (6 rotate image  ) & (9 adding frame) &(12 blur ).
+// Name : Eslam Ahmed El-Sayed Mahmoud   ID : 20240080 filters : (1 gray scale ) & (4 merge image  ) & (7 darken and lighten) &( 10 dedect edges )
+// drive link (https://drive.google.com/drive/folders/15yH3UAEypeJ_dzASA29MQppOut51jV6q?usp=sharing).
+// github repo link (https://github.com/NourhanAli-fcai28/baby-photoshop.git)
 
 
 #include <iostream>
